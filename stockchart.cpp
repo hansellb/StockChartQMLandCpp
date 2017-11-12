@@ -171,6 +171,9 @@ void StockChart::replyFinished(QNetworkReply *reply)
     QJsonDocument jsonDocument;
     QJsonObject jsonObject;
 
+    // Get the stockID from the request url
+    QString stockID = (reply->url().toString()).replace("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=", "").replace("&apikey=KFQCEU5ZSFDTIOGW","");
+
     // Check if there were any errors
     if(reply->error())
     {
@@ -179,6 +182,16 @@ void StockChart::replyFinished(QNetworkReply *reply)
     else
     {
         jsonData = reply->readAll();
+
+        // Store requested data in a file
+        QFile *file = new QFile(QDir::currentPath() + "\\" + stockID + ".txt");
+        if(file->open(QFile::Append))
+        {
+            file->write(jsonData);
+            file->flush();
+            file->close();
+        }
+        delete file;
     }
 
     jsonDocument = QJsonDocument::fromJson(jsonData, &jsonParseError);
@@ -188,7 +201,7 @@ void StockChart::replyFinished(QNetworkReply *reply)
     // Set private variable (this->timeSeries)
     this->timeSeries = timeSeries;
 
-    emit timeSeriesReady((reply->url().toString()).replace("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=", "").replace("&apikey=KFQCEU5ZSFDTIOGW",""));
+    emit timeSeriesReady(stockID);
 
     // Make sure to delete the network reply
     reply->deleteLater();

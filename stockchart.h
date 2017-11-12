@@ -54,25 +54,18 @@ public:
     // Sends a request to retrieve
     Q_INVOKABLE void getStockData(const QString &stockID);
 
-//    Q_INVOKABLE void addXAxis(const QObject &qmlObject);
-//    Q_INVOKABLE void addYAxis(const QObject &qmlObject);
-
 public slots:
     // Used to catch QNetworkAccessManager's reply
     void replyFinished(QNetworkReply *reply);
 
 signals:
-//    void addStockChartTimeSeries(QJsonObject timeSeries);
-    void timeSeriesReady();
+    void timeSeriesReady(QString stockID);
     void startDateChanged(const QString &date);
     void endDateChanged(const QString &date);
     void yAxisMinChanged(float value);
     void yAxisMaxChanged(float value);
 
 private:
-    // For debugging purposes
-    QString className = "StockChart";
-
     // Chart's X & Y axis Min & Max values
     QString m_StartDate;
     QString m_EndDate;

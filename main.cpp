@@ -1,4 +1,3 @@
-//https://stackoverflow.com/questions/38467769/add-c-qabstractseries-to-qml-chartview
 ////#include <QtCharts/QChartView>
 //#include <QtQml/QQmlEngine>
 //#include <QtQuick/QQuickView>
@@ -17,47 +16,15 @@ QT_CHARTS_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    qDebug() << "main";
+//    qDebug() << "main";
     QApplication app(argc, argv);
 
     qmlRegisterType<StockChart>("StockChart", 1, 0, "StockChart");
-
-//    QQmlEngine qmlEngine;
-//    QQmlComponent qmlComponent(&engine, QUrl("qrc:/main.qml"));
-//    StockChart *stockChart = qobject_cast<StockChart *>(qmlComponent.create());
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
-
-    StockChart stockChart;
-
-//    QObject *qmlElement = engine.rootObjects().at(0)->findChild<QObject *>(QString("applicationWindow"));
-//    qDebug() << qmlElement;
-//    QObject::connect(&stockChart, SIGNAL(addStockChartTimeSeries(QJsonObject)), qmlElement, SLOT(test(QJsonObject)));
-
-    //https://doc.qt.io/qt-5/qtqml-cppintegration-interactqmlfromcpp.html
-//    // Using QQmlComponent
-//    QQmlEngine engine;
-//    QQmlComponent component(&engine, QUrl::setUrl("main.qml"));
-//    QObject *object = component.create();
-//    object->setProperty("width", 500);
-//    QQmlProperty(object, "width").write(500);
-////    delete object;
-
-//    // Using QQuickView
-//    QQuickView view;
-//    view.setSource(QUrl(QStringLiteral("MyItem.qml")));
-//    view.show();
-////    QObject *object = view.rootObject();
-//    *object = view.rootObject();
-//    QQuickItem *item = qobject_cast<QQuickItem*>(object);
-//    item->setWidth(500);
-
-//    QObject *rect = object->findChild<QObject*>("rect");
-
-//    delete object;
 
 //    //https://stackoverflow.com/questions/23177839/how-can-i-access-my-window-object-properties-from-c-while-using-qqmlapplicatio
 //    // Step 1: get access to the root object

@@ -1,160 +1,207 @@
 import QtQuick 2.6
-import QtQuick.Controls 2.2
-import QtQuick.Window 2.2
+import QtQuick.Layouts 1.3
 import QtCharts 2.2
 
 import StockChart 1.0
+import QtQuick.Templates 2.2
+import QtQuick.Controls 2.2
 
 ApplicationWindow {
     id: applicationWindow
+    objectName: "applicationWindow"
     visible: true
     width: 640
     height: 480
-    title: qsTr("Hello World")
+    title: qsTr("Stocks")
 
+    function lineSeriesClicked(lineSeriesPoint){
+        console.log(lineSeriesPoint);
+    }
+
+    function lineSeriesHovered(lineSeriesPoint, isHovered){
+//        console.log("x: " + lineSeriesPoint.x + " | y: " + lineSeriesPoint.y + " | hovering Point? " + isHovered);
+        if(isHovered){
+            var date = new Date(lineSeriesPoint.x);
+            console.log(date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate());
+        }
+    }
 
     StockChart {
         id: stockChart
-        onAddStockChartTimeSeries: {
-//            console.log("addStockChartTimeSeries: ", JSON.stringify(timeSeries));
-            Object.keys(timeSeries).forEach(function callback(currentValue, index, array){
-//                console.log(index + " -> " + currentValue);
-//                console.log(timeSeries[currentValue]["1. open"]);
-            });
+        objectName: "stockChart"
+//        onAddStockChartTimeSeries: {
+        onTimeSeriesReady: {
+            // Create a new empty AbstractSeries to be plotted in the chart
+            var chartViewSeries = chartView.createSeries(ChartView.SeriesTypeLine, comboBox_stockID.currentText, dateTimeAxis_chartView_xAxis, valueAxis_chartView_yAxis);
 
-            var mySeries = chartView.createSeries(ChartView.SeriesTypeLine, "Line", xTime, yValues);
-            stockChart.setLineSeries(mySeries);
+            // Set chartViewSeries (AbstractSeries/LineSeries) properties
+            chartViewSeries.objectName = comboBox_stockID.currentText;
+            chartViewSeries.capStyle = Qt.RoundCap;
+            chartViewSeries.width = 2.75;
+            chartViewSeries.onClicked.connect(lineSeriesClicked);
+            chartViewSeries.onHovered.connect(lineSeriesHovered);
+
+//            console.log(chartViewSeries.count); // 0
+            stockChart.setLineSeries(chartViewSeries);
+//            console.log(chartViewSeries.count); // 100
+//            chartView.title = stockID.currentText
+
+//            lineSeries_stockOpenPrice.name = comboBox_stockID.currentText;
+//            stockChart.setLineSeries(lineSeries_stockOpenPrice);
         }
 
-        onStartDateChanged: {
-//            console.log("onStartDateChanged");
-//            console.log(date);
-            xTime.min = date;
-        }
+        onStartDateChanged: { dateTimeAxis_chartView_xAxis.min = date; }
 
-        onEndDateChanged: {
-//            console.log("onEndDateChanged");
-//            console.log(date);
-            xTime.max = date;
-        }
+        onEndDateChanged: { dateTimeAxis_chartView_xAxis.max = date; }
 
-        onYAxisMinChanged: {
-            console.log("yAxis Min: " + typeof(value) + value);
-            yValues.min = value;
-        }
+        onYAxisMinChanged: { valueAxis_chartView_yAxis.min = value; }
 
-        onYAxisMaxChanged: {
-            console.log("yAxis Max: " + value);
-            yValues.max = value;
-        }
+        onYAxisMaxChanged: { valueAxis_chartView_yAxis.max = value; }
     } // StockChart
 
-//    function addSeries()
-//    {
-//        // var xyz = diabetesView.setLineSeries();
-
-//        var series = chartView.createSeries(ChartView.SeriesTypeLine, "Test", chartView.axisX(lineseries), chartView.axisY(lineseries));
-//        series.append(0,50);
-//        series.append(4,130);
-
-//        series = stockChart.setLineSeries();
-
-//        chartView.update();
-//    }
-
-	//https://stackoverflow.com/questions/38467769/add-c-qabstractseries-to-qml-chartview
     function addSeries()
     {
-        //Define Axes of the ChartView
-//        stockChart.getAxisYDescription(yDescription);
-//        stockChart.getAxisXTime(xTime);
-//        stockChart.getAxisYValues(yValues);
+        //Define the ChartView's Axes
+//        stockChart.addXAxis(chartView_xAxis);
+//        stockChart.addYAxis(chartView_yAxis);
 
-        stockChart.getStockData();
+        stockChart.getStockData(comboBox_stockID.currentText);
 
-        // Create new LineSeries with 3 Axes (Two-Y-Axis, One-X-Axis)
-        var mySeries = chartView.createSeries(ChartView.SeriesTypeLine, "Line", xTime, yValues);
-        var mySeries2 = chartView.createSeries(ChartView.SeriesTypeLine, "Overview", xTime, yDescription);
-
-//        // Define series on specific wishes
-//        stockChart.setLineSeries(mySeries);
+//        var mySeries = chartView.createSeries(ChartView.SeriesTypeLine, "Line", chartView_xAxis, chartView_yAxis);
 
         //Delete not needed series (only created because second y-Axis
-        chartView.removeSeries(mySeries);
-        chartView.removeSeries(mySeries2);
+//        chartView.removeSeries(mySeries);
     }
 
-    Column {
-        Rectangle {
-            id: infoArea1
-            color: "green"
-            width: applicationWindow.width
-            height: applicationWindow.height *0.25
+    ColumnLayout {
+        id: columnLayout
+        objectName: "columnLayout"
+        width: parent.width
+        height: parent.height
+//        anchors.fill: parent
 
-            MouseArea{
-                anchors.fill: parent
-                onClicked: addSeries()
-            }
-        }
+//        Rectangle {
+//            id: infoArea1
+//            color: "green"
+//            width: 50
+//            height: 50
 
-//        ChartView{
-//            id: chartView
-//            width: applicationWindow.width
-//            height: applicationWindow.height *0.75
-//            title: "Line"
-
-//            antialiasing: true
-
-//            ValueAxis{
-//                id: vlaueAxisX
-//                min: 0
-//                max: 24
-//                tickCount: 12
-//                labelFormat: "%2.0f:00"
-//            }
-//            ValueAxis{
-//                id: valueAxisY
-//                min:0
-//                max: 500
-////                tickCount: 50
-//                tickCount: 12
-//            }
-
-//            LineSeries {
-//                id: lineseries
-//                axisX: vlaueAxisX
-//                axisY: valueAxisY
-//                name: "LineSeries"
-//                XYPoint { id: zero; x: 0; y: 192.6}
-//                XYPoint { id: first; x: 7; y: 89 }
-//                XYPoint { x: 9; y: 80 }
-//                XYPoint { x: 12; y: 30 }
-//                XYPoint { x: 14; y: 150 }
-//                XYPoint { x: 18; y: 40 }
-//                XYPoint { x: 21; y: 280 }
-//                XYPoint { id: last; x: 23.5; y: 200 }
-//                XYPoint { id: twentyfour; x: 24; y: 192.6}
+//            MouseArea{
+//                anchors.fill: parent
+//                onClicked: addSeries()
 //            }
 //        }
 
+        RowLayout {
+            id: rowLayout
+            objectName: "rowLayout"
+            height: 50
+
+            ComboBox {
+                id: comboBox_stockID
+                objectName: "comboBox_stockID"
+                textRole: "key"
+
+                model: ListModel {
+                    ListElement { key: "AMZN"; value: 1 }
+                    ListElement { key: "AAPL"; value: 2 }
+                    ListElement { key: "GOOG"; value: 3 }
+                    ListElement { key: "NFLX"; value: 4 }
+                    ListElement { key: "NVDA"; value: 5 }
+                    ListElement { key: "TSLA"; value: 6 }
+    //                ListElement { key: "YHOO"; value: 7 }
+                }
+
+                onCurrentTextChanged: {
+    //                addSeries()
+                    stockChart.getStockData(comboBox_stockID.currentText)
+                }
+            }// ComboBox
+
+            Button {
+                id: button_removeSeries
+                objectName: "button_removeSeries"
+                anchors.left: comboBox_stockID.right
+                anchors.leftMargin: 10
+                text: qsTr("Button")
+
+                onClicked: {
+                    valueAxis_chartView_yAxis.min = 0;
+                    valueAxis_chartView_yAxis.max = 1200;
+//                    chartView.removeSeries(chartView.series("AMZN"));
+//                    console.log("plotArea: " + chartView.plotArea + "x:" + chartView.plotArea.x + " | y: " + chartView.plotArea.y);
+                }
+            }// Button
+
+            Rectangle {
+                id: container
+                anchors.left: button_removeSeries.right
+                anchors.leftMargin: 10
+                Layout.fillWidth: true; height: parent.height
+
+                Rectangle {
+                    id: rect
+                    width: 50; height: 50
+                    color: "red"
+                    opacity: (600.0 - rect.x) / 600
+
+                    MouseArea {
+                        anchors.fill: parent
+                        drag.target: rect
+                        drag.axis: Drag.XAxis
+                        drag.minimumX: 0
+                        drag.maximumX: container.width - rect.width
+                    }
+                }
+            }// Rectangle
+
+        }// RowLayout
+
         ChartView {
             id: chartView
-            title: "Stock XYZ"
-            width: applicationWindow.width * 0.78
-            height: applicationWindow.height * 0.66
+            objectName: "chartView"
+//            title: "Stocks"
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            anchors.top: rowLayout.bottom
             antialiasing: true
-//            backgroundColor: "grey"
+            theme: ChartView.ChartThemeDark
 
-            CategoryAxis {
-                id: yDescription
-                min: 0
-                max: 500
-//                tickCount: 12
-            }
+//            MouseArea {
+//                id: mouseArea_chartView
+//                objectName: "mouseArea_chartView"
+//                anchors.fill: parent
+//                hoverEnabled: true
+
+//                onClicked: {
+//                    console.log(mouseArea_chartView.mouseX);
+////                    chartView_yAxis.min = 0;
+////                    chartView_yAxis.max = 1500;
+//                }
+
+//                onWheel: {
+//                    if(wheel.angleDelta.y > 0){
+//                        chartView.zoomIn();
+//                    }else{
+//                        chartView.zoomOut();
+//                    }
+//                }
+//            }
+
+//            LineSeries {
+//                id: lineSeries_stockOpenPrice
+//                objectName: "lineSeries_stockOpenPrice"
+//                axisX: dateTimeAxis_chartView_xAxis
+//                axisY: valueAxis_chartView_yAxis
+
+//                onClicked: {
+//                    console.log("clicked on lineseries");
+//                }
+//            }
 
             DateTimeAxis {
-                id: xTime
-//                format: "yyyy-MM-dd hh:mm:ss"
+                id: dateTimeAxis_chartView_xAxis
+                objectName: "dateTimeAxis_chartView_xAxis"
                 format: "yyyy-MM-dd"
                 min: stockChart.startDate
                 max: stockChart.endDate
@@ -163,43 +210,12 @@ ApplicationWindow {
             }
 
             ValueAxis {
-                id: yValues
-                min: stockChart.yAxisMin
-                max: stockChart.yAxisMax
-                tickCount: 5
+                id: valueAxis_chartView_yAxis
+                objectName: "valueAxis_chartView_yAxis"
+                min: 900
+                max: 1200
+                tickCount: 10
             }
-
-//            CategoryAxis {
-//                id: yValues
-//                min: 0
-//                max: 1500
-//                tickCount: 12
-
-////                CategoryRange {
-////                    label: "critical"
-////                    endValue: 50
-////                }
-
-////                CategoryRange {
-////                    label: "low"
-////                    endValue: 80
-////                }
-
-////                CategoryRange {
-////                    label: "normal"
-////                    endValue: 120
-////                }
-
-////                CategoryRange {
-////                    label: "high"
-////                    endValue: 160
-////                }
-
-////                CategoryRange {
-////                    label: "extremely high"
-////                    endValue: 200
-////                }
-//            }
-        }
-    }
-}
+        }// ChartView
+    }// ColumnLayout
+}// ApplicationWindow

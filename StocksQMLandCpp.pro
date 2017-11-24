@@ -1,7 +1,7 @@
 TEMPLATE = app
 
 QT += qml quick widgets charts network
-CONFIG += c++11 static
+CONFIG += c++11
 
 SOURCES += main.cpp \
     stockchart.cpp

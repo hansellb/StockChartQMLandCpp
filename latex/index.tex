@@ -1,0 +1,41 @@
+\hypertarget{index_intro_sec}{}\section{Introduction}\label{index_intro_sec}
+Basic application that shows multiple time series in a chart (using Qt Q\+ML and C++) This program demonstrates the use of\+: \begin{DoxyItemize}
+\item Qt Q\+Network\+Access\+Manager to make and receive http requests \item Design a basic U\+I/front-\/end using Qt Q\+ML \item Implement the backend logic in C++ \item Integration of C++ in Q\+ML (two-\/way communication between Qt Q\+ML and C++) ~\newline
+ ~\newline
+ ~\newline
+\end{DoxyItemize}
+\hypertarget{index_how_sec}{}\section{How it works\+:}\label{index_how_sec}
+The program will retrieve stock information from Alpha Vantage by using one of their A\+P\+Is \begin{DoxyItemize}
+\item {\ttfamily \href{https://www.alphavantage.co/documentation/}{\tt https\+://www.\+alphavantage.\+co/documentation/}} \item {\ttfamily \href{https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=MSFT&apikey=demo}{\tt https\+://www.\+alphavantage.\+co/query?function=\+T\+I\+M\+E\+\_\+\+S\+E\+R\+I\+E\+S\+\_\+\+D\+A\+I\+L\+Y\&symbol=\+M\+S\+F\+T\&apikey=demo}} \end{DoxyItemize}
+The stock data retrieved, is J\+S\+ON object containing time series with the stock\textquotesingle{}s open, high, low, close prices and volume information. ~\newline
+ ~\newline
+ ~\newline
+\hypertarget{index_gui_sec}{}\section{The G\+U\+I / Front end}\label{index_gui_sec}
+The UI is entirely built using Q\+ML. It has two Combo\+Boxes, four Buttons and one Chart\+View. The following screenshot shows the application displaying three time series / stocks / plot lines on the chart (the last stock added was N\+Vidia or N\+V\+DA as seen in the leftmost Combo\+Box) with the \char`\"{}\+Blue\+Cerulean\char`\"{} theme applied. ~\newline
+ ~\newline
+\hypertarget{index_comboboxes}{}\subsection{Combo\+Boxes}\label{index_comboboxes}
+The first Combo\+Box contains a predefined set of \char`\"{}symbol\char`\"{}s or stock I\+Ds (e.\+g., Amazon is {\bfseries A\+M\+ZN}, Google is {\bfseries G\+O\+OG}, Apple is {\bfseries A\+A\+PL}, etc.).
+
+The first element in the Combo\+Box is A\+T\+VI, therefore, when the program starts, the Activision Blizzard, Inc. stock data will be retrieved. When the user selects another stock ID from the combo box, the stock data for that ID will be added and displayed on the chart. After the time series is added to the chart, the program will automatically adjust the Y axis scale to fit the recently retrieved stock data.
+
+The second Combo\+Box lets the user change the chart\textquotesingle{}s visual style, e.\+g., how the chart looks. These visual changes are based on themes already available for the Chart\+View Q\+ML type ~\newline
+ ~\newline
+\hypertarget{index_buttons}{}\subsection{Buttons}\label{index_buttons}
+There are five (5) buttons in the UI that create a better user experience\+: ~\newline
+\hypertarget{index_button1}{}\subsubsection{\char`\"{}\+Delete Stock\char`\"{}}\label{index_button1}
+This button will delete the stock time series or stock data, from the chart, corresponding to the name currently visible in the Combo\+Box, thus, if the combo box has A\+M\+ZN displayed, when the button is clicked, the A\+M\+ZN chart plot will be removed. ~\newline
+\hypertarget{index_button2}{}\subsubsection{\char`\"{}\+Fit A\+L\+L\char`\"{}}\label{index_button2}
+This button will adjust the Y axis of the chart to have values between the maximum and minimum values amongst all time series in the chart. For example, suppose there is one plot line in the chart with values between 60 and 200. If another plot line with values between 800 and 1000 is added, then the first line will not be visible as the application will adjust the chart to perfectly visualize the newly added plot line. Clicking the \char`\"{}\+Fit A\+L\+L\char`\"{} button will adjust the chart to be able to display values between 60 and 1000. ~\newline
+\hypertarget{index_button3}{}\subsubsection{\char`\"{}\+Delete A\+L\+L\char`\"{}}\label{index_button3}
+This button removes/deletes A\+LL plot lines in the chart ~\newline
+\hypertarget{index_button4}{}\subsubsection{\char`\"{}\+Zoom In\char`\"{}}\label{index_button4}
+This buttons zooms in the center of the chart ~\newline
+\hypertarget{index_button5}{}\subsubsection{\char`\"{}\+Zoom Out\char`\"{}}\label{index_button5}
+This buttons zooms out until the original view of the plot line, that is, the button does not allow the line series to be smaller than the chart\textquotesingle{}s plot area. ~\newline
+ ~\newline
+ ~\newline
+\hypertarget{index_diagrams_sec}{}\section{U\+M\+L Diagrams}\label{index_diagrams_sec}
+\hypertarget{index_class_diag}{}\subsection{Class diagram}\label{index_class_diag}
+~\newline
+ ~\newline
+\hypertarget{index_sequence_diag}{}\subsection{Sequence diagram}\label{index_sequence_diag}

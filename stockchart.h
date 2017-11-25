@@ -1,5 +1,5 @@
 /*! \file stockchart.h
- *  Class StockChart file
+ * \brief StockChart class file
  */
 
 
@@ -17,12 +17,14 @@
 #include <QtNetwork>
 #include <QtCore>
 
-QT_CHARTS_USE_NAMESPACE //!< Namespace for QtCharts
+QT_CHARTS_USE_NAMESPACE // Namespace for QtCharts
 
-/*! \class
- *  \brief The StockChart class
- *
- *  A class that handles data for a QML ChartView type object. It extends the class QObject
+/*! \class StockChart
+ *  \brief Class StockChart. Extends QObject
+ *  \details This class acts as the back end for the QML application.
+ *  \author Hansell Baran
+ *  \version 1.0
+ *  \date 2017-11-25
  */
 class StockChart : public QObject
 {

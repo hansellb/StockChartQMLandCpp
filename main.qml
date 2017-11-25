@@ -1,3 +1,6 @@
+/*! \file main.qml
+ *  \brief QML file containing the application's Front end / GUI implementation
+ */
 import QtQuick 2.6
 import QtQuick.Layouts 1.3
 import QtCharts 2.2
